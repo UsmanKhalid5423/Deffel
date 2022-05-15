@@ -302,7 +302,7 @@ const fetch = async (req, res, next) => {
 
           data = {
            // orderCancel,
-            orderDetail,
+            //orderDetail,
             //confirmOrderCancel
           }
         return response.send(
