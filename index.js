@@ -338,74 +338,74 @@ const server = app.listen(2600, function () {
 
 // app.post('/create/booking',async(req,res,next)=>{
 
-//     try{
+    // try{
         
-//         const {offerId,passengerId,currency,amount} = req.body
+    //     const {offerId,passengerId,currency,amount} = req.body
 
-//         const booking = await duffel.orders.create({ 
-//             // "metadata": {
-//             //                 "payment_intent_id": "pit_00009htYpSCXrwaB9DnUm2"
-//             //             },
-//             selected_offers: [offerId],
-//             type: "instant",
-//             payments: [
-//               {
-//                 type: "balance",
-//                 currency: currency,//"USD",//TOTAL_CURRENCY,
-//                 amount: amount,//"199.85",//TOTAL_AMOUNT
-//               }
-//             ],
-//             passengers: [
-//                 {
-//                   type: "adult",
-//                   title: "mrs",
-//                   phone_number: "+442080160509",
-//                   //"infant_passenger_id": infantId,//"pas_00009hj8USM8Ncg32aTGHL",
-//                 //   identity_documents: [
-//                 //     {
-//                 //       unique_identifier: "19KL56147",
-//                 //       type: "passport",
-//                 //       issuing_country_code: "GB",
-//                 //       expires_on: "2025-04-25"
-//                 //     }
-//                 //   ],
-//                   id: passengerId,
-//                   given_name: "Amelia",
-//                   gender: "f",
-//                   family_name: "Earhart",
-//                   email: "amelia@duffel.com",
-//                   born_on: "1987-07-24"
-//                 }
-//               ],            
-//             //   {
-//             //     phone_number: "+442080160509",
-//             //     email: "potts@example.com",
-//             //     born_on: "1983-11-02",
-//             //     title: "mrs",
-//             //     gender: "m",
-//             //     family_name: "Potts",
-//             //     given_name: "Pepper",
-//             //     id: ADULT_PASSENGER_ID_2
-//             //   },
-//             //   {
-//             //     phone_number: "+442080160506",
-//             //     email: "morgan@example.com",
-//             //     born_on: "2019-08-24",
-//             //     title: "mrs",
-//             //     gender: "f",
-//             //     family_name: "Stark",
-//             //     given_name: "Morgan",
-//             //     id: INFANT_PASSENGER_ID
-//             //   }
-//           })
+    //     const booking = await duffel.orders.create({ 
+    //         // "metadata": {
+    //         //                 "payment_intent_id": "pit_00009htYpSCXrwaB9DnUm2"
+    //         //             },
+    //         selected_offers: [offerId],
+    //         type: "instant",
+    //         payments: [
+    //           {
+    //             type: "balance",
+    //             currency: currency,//"USD",//TOTAL_CURRENCY,
+    //             amount: amount,//"199.85",//TOTAL_AMOUNT
+    //           }
+    //         ],
+    //         passengers: [
+    //             {
+    //               type: "adult",
+    //               title: "mrs",
+    //               phone_number: "+442080160509",
+    //               //"infant_passenger_id": infantId,//"pas_00009hj8USM8Ncg32aTGHL",
+    //             //   identity_documents: [
+    //             //     {
+    //             //       unique_identifier: "19KL56147",
+    //             //       type: "passport",
+    //             //       issuing_country_code: "GB",
+    //             //       expires_on: "2025-04-25"
+    //             //     }
+    //             //   ],
+    //               id: passengerId,
+    //               given_name: "Amelia",
+    //               gender: "f",
+    //               family_name: "Earhart",
+    //               email: "amelia@duffel.com",
+    //               born_on: "1987-07-24"
+    //             }
+    //           ],            
+    //         //   {
+    //         //     phone_number: "+442080160509",
+    //         //     email: "potts@example.com",
+    //         //     born_on: "1983-11-02",
+    //         //     title: "mrs",
+    //         //     gender: "m",
+    //         //     family_name: "Potts",
+    //         //     given_name: "Pepper",
+    //         //     id: ADULT_PASSENGER_ID_2
+    //         //   },
+    //         //   {
+    //         //     phone_number: "+442080160506",
+    //         //     email: "morgan@example.com",
+    //         //     born_on: "2019-08-24",
+    //         //     title: "mrs",
+    //         //     gender: "f",
+    //         //     family_name: "Stark",
+    //         //     given_name: "Morgan",
+    //         //     id: INFANT_PASSENGER_ID
+    //         //   }
+    //       })
 
-//       res.send(booking).json()
-//     }
-//     catch(err)
-//     {
-//         console.log('=== >>> ERROR ==== >> ',err)
-//         res.send(err)
-//     }
+    //   res.send(booking).json()
+    // }
+    // catch(err)
+    // {
+    //     console.log('=== >>> ERROR ==== >> ',err)
+    //     res.send(err)
+    // }
 // })
 
 
@@ -426,13 +426,6 @@ server.timeout = 8000 * 10000;
 
 
 require("./app/routes/index")(app);
-
-// app.get('/api/v1/duffel/common',require('./app/routes/common/common'))
-
-// app.get('/api/v1/duffel/common/search/flight',(req,res,next)=>{
-//     res.send('done').json()
-// })
-
 
 
 /*******************************************************/

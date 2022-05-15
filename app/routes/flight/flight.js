@@ -7,7 +7,7 @@ require('dotenv').config();
 /*******************************************************/
 // Importing Files.
 /*******************************************************/
-const common = require('../../controllers/common/common');
+const flight = require('../../controllers/flight/flight');
 /*******************************************************/
 // Configuring Multer.
 /*******************************************************/
@@ -19,7 +19,10 @@ const common = require('../../controllers/common/common');
 /**
  * It is used by admin to to login
  */
-router.route('/search/flight').get(common.fetch);
+router.route('/search/flight').get(flight.fetch);
+
+router.route('/book/flight-booking').post(flight.add);
+
 
 /*******************************************************/
 // Exporting Routes.
