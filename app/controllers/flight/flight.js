@@ -281,12 +281,67 @@ const fetch = async (req, res, next) => {
 };
 
 
+
+/**
+ * Controller: It is used add a  Admin.
+ */
+ const remove = async (req, res, next) => {
+    try{
+        const {orderId} = req.body
+
+        let data = {}
+        const orderCancel = await duffel.orderCancellations.create({
+            order_id: orderId
+          })
+
+        const confirmOrderCancel = await duffel.orderCancellations.confirm(orderCancel.data.id)
+
+        
+          //const orderDetail = await duffel.orders.get(orderId)
+
+
+          data = {
+           // orderCancel,
+            orderDetail,
+            //confirmOrderCancel
+          }
+        return response.send(
+            req,
+            res,
+            next,
+            "SUCCESS",
+            200,
+            "BOOKING_CANCELLED_SUCCESSFULLY",
+            null
+        );
+
+        //res.send(booking).json()
+        }
+        catch(err)
+        {
+            console.log('=== >>> ERROR ==== >> ',err)
+
+            return response.send(
+                req,
+                res,
+                next,
+                "ERROR",
+                500,
+                "SERVER_ERROR",
+                err
+            );
+        }
+
+};
+
+
 /*******************************************************/
 // Exporting Controllers.
 /*******************************************************/
 module.exports = {
     fetch,
-    add
+    add,
+    remove
 }
 
 /*******************************************************/

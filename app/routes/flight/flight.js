@@ -21,7 +21,10 @@ const flight = require('../../controllers/flight/flight');
  */
 router.route('/search/flight').get(flight.fetch);
 
-router.route('/book/flight-booking').post(flight.add);
+router.route('/add/flight-booking').post(flight.add);
+
+router.route('/cancel/flight-booking').post(flight.remove);
+
 
 
 /*******************************************************/
