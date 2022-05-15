@@ -1,0 +1,7 @@
+/node_modules
+/logs
+/uploads
+credit.csv
+invoice.pdf
+package-lock.json
+.vscode
