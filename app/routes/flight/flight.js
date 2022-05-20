@@ -25,6 +25,8 @@ router.route('/add/flight-booking').post(flight.add);
 
 router.route('/cancel/flight-booking').post(flight.remove);
 
+router.route('/initiate/payment').post(flight.initiatePayment);
+
 
 
 /*******************************************************/

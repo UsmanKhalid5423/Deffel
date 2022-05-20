@@ -163,14 +163,16 @@ const fetch = async (req, res, next) => {
             //                 "payment_intent_id": "pit_00009htYpSCXrwaB9DnUm2"
             //             },
             selected_offers: [offerId],
-            type: "instant",
-            payments: [
-                {
-                type: "balance",
-                currency: currency,//"USD",//TOTAL_CURRENCY,
-                amount: amount,//"199.85",//TOTAL_AMOUNT
-                }
-            ],
+            // type: "instant",
+            type: "hold",
+            // commented for hold
+            // payments: [
+            //     {
+            //     type: "balance",
+            //     currency: currency,//"USD",//TOTAL_CURRENCY,
+            //     amount: amount,//"199.85",//TOTAL_AMOUNT
+            //     }
+            // ],
             passengers: [
                 {
                     type: "adult",
@@ -187,6 +189,14 @@ const fetch = async (req, res, next) => {
             
         })
 
+        // const payment = await duffel.payments.create({
+        //     "payment": {
+        //       "type": "balance",
+        //       "currency": "USD",
+        //       "amount": booking.data.total_amount
+        //     },
+        //     "order_id": booking.data.id//"ord_00003x8pVDGcS8y2AWCoWv"
+        //   })
 
         let passengers = []
         let flightInfo_v2 = []
@@ -231,7 +241,9 @@ const fetch = async (req, res, next) => {
             data = {
             flights: flightInfo_v2,
             passengers,
-            booking
+            //booking,
+            bookingDetail: booking.data.id
+            //payment
             //}
             // res.send(data).json()
               //return offerDetailList;
@@ -335,13 +347,68 @@ const fetch = async (req, res, next) => {
 };
 
 
+
+/**
+ * Controller: It is used add a  Admin.
+ */
+ const initiatePayment = async (req, res, next) => {
+    try{
+        const {orderId,amount} = req.body
+        // const payment = await duffel.payments.create({ 
+        //     order_id: orderId,
+        //     payment: {
+        //       type: "balance",
+        //       amount: amount,
+        //       currency: "USD"
+        //     }
+        //   })
+
+
+          const payment = await duffel.paymentIntents.create({
+            "currency": "USD",
+            "amount": amount
+          })
+          
+          
+
+        return response.send(
+            req,
+            res,
+            next,
+            "SUCCESS",
+            201,
+            "PAYMENT_SUCCESSFULL",
+            payment
+        );
+
+        //res.send(booking).json()
+        }
+        catch(err)
+        {
+            console.log('=== >>> ERROR ==== >> ',err)
+
+            return response.send(
+                req,
+                res,
+                next,
+                "ERROR",
+                500,
+                "SERVER_ERROR",
+                err
+            );
+        }
+
+};
+
+
 /*******************************************************/
 // Exporting Controllers.
 /*******************************************************/
 module.exports = {
     fetch,
     add,
-    remove
+    remove,
+    initiatePayment,
 }
 
 /*******************************************************/
