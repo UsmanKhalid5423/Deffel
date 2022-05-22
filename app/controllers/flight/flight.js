@@ -302,19 +302,19 @@ const fetch = async (req, res, next) => {
         const {orderId} = req.body
 
         let data = {}
-        const orderCancel = await duffel.orderCancellations.create({
-            order_id: orderId
-          })
+        // const orderCancel = await duffel.orderCancellations.create({
+        //     order_id: orderId
+        //   })
 
-        const confirmOrderCancel = await duffel.orderCancellations.confirm(orderCancel.data.id)
+        //const confirmOrderCancel = await duffel.orderCancellations.confirm(orderCancel.data.id)
 
         
-          //const orderDetail = await duffel.orders.get(orderId)
+          const orderDetail = await duffel.orders.get(orderId)
 
 
           data = {
-           // orderCancel,
-            //orderDetail,
+            //orderCancel,
+            orderDetail,
             //confirmOrderCancel
           }
         return response.send(
@@ -324,7 +324,7 @@ const fetch = async (req, res, next) => {
             "SUCCESS",
             200,
             "BOOKING_CANCELLED_SUCCESSFULLY",
-            null
+            data
         );
 
         //res.send(booking).json()
@@ -401,6 +401,193 @@ const fetch = async (req, res, next) => {
 };
 
 
+
+
+/**
+ * Controller: It is used add a  Admin.
+ */
+ const confirmPayment = async (req, res, next) => {
+    try{
+        const {orderId,amount} = req.body
+       
+        const payment = await duffel.payments.create({
+            payment: {
+              type: "balance",
+              currency: "USD",
+              amount: amount
+            },
+            order_id: orderId
+          })
+          
+          
+
+        return response.send(
+            req,
+            res,
+            next,
+            "SUCCESS",
+            201,
+            "PAYMENT_SUCCESSFULL",
+            payment
+        );
+
+        //res.send(booking).json()
+        }
+        catch(err)
+        {
+            console.log('=== >>> ERROR ==== >> ',err)
+
+            return response.send(
+                req,
+                res,
+                next,
+                "ERROR",
+                500,
+                "SERVER_ERROR",
+                err
+            );
+        }
+
+};
+
+
+/**
+ * Controller: It is used add a  Admin.
+ */
+ const cancelBooking = async (req, res, next) => {
+    try{
+        const {orderId} = req.body
+
+        let data = {}
+        const orderCancel = await duffel.orderCancellations.create({
+            order_id: orderId
+        })
+
+
+          data = {
+            orderCancel
+          }
+        return response.send(
+            req,
+            res,
+            next,
+            "SUCCESS",
+            200,
+            "BOOKING_CANCELLED_SUCCESSFULLY",
+            data
+        );
+
+        //res.send(booking).json()
+        }
+        catch(err)
+        {
+            console.log('=== >>> ERROR ==== >> ',err)
+
+            return response.send(
+                req,
+                res,
+                next,
+                "ERROR",
+                500,
+                "SERVER_ERROR",
+                err
+            );
+        }
+
+};
+
+
+/**
+ * Controller: It is used add a  Admin.
+ */
+ const confirmOrderCancel = async (req, res, next) => {
+    try{
+        const {orderId} = req.body
+
+        let data = {}
+        const orderCancelConfirm = await duffel.orderCancellations.confirm(orderId)
+
+
+          data = {
+            orderCancelConfirm
+          }
+        return response.send(
+            req,
+            res,
+            next,
+            "SUCCESS",
+            200,
+            "BOOKING_CANCELLED_SUCCESSFULLY",
+            data
+        );
+
+        //res.send(booking).json()
+        }
+        catch(err)
+        {
+            console.log('=== >>> ERROR ==== >> ',err)
+
+            return response.send(
+                req,
+                res,
+                next,
+                "ERROR",
+                500,
+                "SERVER_ERROR",
+                err
+            );
+        }
+
+};
+
+
+/**
+ * Controller: It is used add a  Admin.
+ */
+ const validateOrderCancel = async (req, res, next) => {
+    try{
+        const {orderId} = req.body
+
+        let data = {}
+        const validateOrderCancelConfirm = await duffel.orders.get(orderId)
+
+          data = {
+            validateOrderCancelConfirm
+          }
+        return response.send(
+            req,
+            res,
+            next,
+            "SUCCESS",
+            200,
+            "BOOKING_CANCELLED_SUCCESSFULLY",
+            data
+        );
+
+        //res.send(booking).json()
+        }
+        catch(err)
+        {
+            console.log('=== >>> ERROR ==== >> ',err)
+
+            return response.send(
+                req,
+                res,
+                next,
+                "ERROR",
+                500,
+                "SERVER_ERROR",
+                err
+            );
+        }
+
+};
+
+
+
+
+
+
 /*******************************************************/
 // Exporting Controllers.
 /*******************************************************/
@@ -409,6 +596,10 @@ module.exports = {
     add,
     remove,
     initiatePayment,
+    confirmPayment,
+    cancelBooking,
+    confirmOrderCancel,
+    validateOrderCancel
 }
 
 /*******************************************************/

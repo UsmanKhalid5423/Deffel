@@ -7,7 +7,7 @@ require('dotenv').config();
 /*******************************************************/
 // Importing Files.
 /*******************************************************/
-const flight = require('../../controllers/flight/flight');
+const user = require('../../controllers/user/user');
 /*******************************************************/
 // Configuring Multer.
 /*******************************************************/
@@ -19,24 +19,14 @@ const flight = require('../../controllers/flight/flight');
 /**
  * It is used by admin to to login
  */
-router.route('/search/flight').get(flight.fetch);
 
-router.route('/add/flight-booking').post(flight.add);
+router.route('/user/signUp').post(user.signUp);
 
-router.route('/cancel/flight-booking').post(flight.remove);
+/**
+ * It is used by admin to to login
+ */
 
-router.route('/initiate/payment').post(flight.initiatePayment);
-
-router.route('/confirm/payment').post(flight.confirmPayment);
-
-router.route('/cancel/booking').post(flight.cancelBooking);
-
-router.route('/confirm/cancel-booking').post(flight.confirmOrderCancel);
-
-router.route('/validate/cancel-booking').post(flight.validateOrderCancel);
-
-
-
+ router.route('/user/login').post(user.login);
 
 
 /*******************************************************/
