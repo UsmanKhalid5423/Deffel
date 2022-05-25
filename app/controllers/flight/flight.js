@@ -609,3 +609,11 @@ module.exports = {
 /**
  * Function: It is manage admin.
  */
+
+/**
+ * FETCH FLIGHT
+ * CREATE BOOKING/BOOK FLIGHT
+ * INITIATE PAYMENT
+ * CONFIRM PAYMENT
+ */
+
