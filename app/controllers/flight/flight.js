@@ -156,12 +156,9 @@ const fetch = async (req, res, next) => {
  */
  const add = async (req, res, next) => {
     try{
-        const {offerId,passengerId,currency,amount} = req.body
+        const {offerId,passengerId,currency,amount,title,phone_number,gender,given_name,family_name,email,born_on} = req.body
 
         const booking = await duffel.orders.create({ 
-            // "metadata": {
-            //                 "payment_intent_id": "pit_00009htYpSCXrwaB9DnUm2"
-            //             },
             selected_offers: [offerId],
             // type: "instant",
             type: "hold",
@@ -176,14 +173,14 @@ const fetch = async (req, res, next) => {
             passengers: [
                 {
                     type: "adult",
-                    title: "mrs",
-                    phone_number: "+442080160509",
+                    title: title,
+                    phone_number: phone_number,
                     id: passengerId,
-                    given_name: "Amelia",
-                    gender: "f",
-                    family_name: "Earhart",
-                    email: "amelia@duffel.com",
-                    born_on: "1987-07-24"
+                    given_name: given_name,
+                    gender: gender,
+                    family_name: family_name,
+                    email: email,
+                    born_on: born_on
                 }
                 ],            
             
