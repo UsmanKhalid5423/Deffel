@@ -20,6 +20,7 @@ module.exports = function (sequelize, Sequelize) {
                 type: Sequelize.DOUBLE,
             },
             departureDate:{
+                //type: Sequelize.DATE,
                 type: Date
             },
             status: {

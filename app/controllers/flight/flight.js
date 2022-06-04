@@ -2,7 +2,10 @@
 // Importing Files.
 /*******************************************************/
 const response = require("../../utility/functions/response");
-const { Duffel } = require('@duffel/api')
+const models = require("../../../database/sequelize/sequelize");
+const { Duffel } = require('@duffel/api');
+//const database = require("../../../database/sequelize/sequelize");
+const database = require("../../utility/calls/databaseRequest")
 require('dotenv').config()
 /*******************************************************/
 // Importing Npm Modules.
@@ -91,7 +94,9 @@ const fetch = async (req, res, next) => {
                         departure_time: element.slices[0].segments[0].departing_at,
                         arrival_time: element.slices[0].segments[0].arriving_at,
                         flight_duration: element.slices[0].duration,
-                        total_amount: element.total_currency+" " + element.total_amount
+                        total_amount: element.total_currency+" " + element.total_amount,
+                        requirePayment: element.payment_requirements.requires_instant_payment,
+                        expiresAt: element.expires_at,
                     }
                     if(way=="twoWay")
                     {
@@ -103,7 +108,10 @@ const fetch = async (req, res, next) => {
                             departure_time: element.slices[1].segments[0].departing_at,
                             arrival_time: element.slices[1].segments[0].arriving_at,
                             flight_duration: element.slices[1].duration,
-                            total_amount: element.total_currency + " " +element.total_amount
+                            total_amount: element.total_currency + " " +element.total_amount,
+                            requirePayment: element.payment_requirements.requires_instant_payment,
+                            expiresAt: element.expires_at
+
                         }
                     }
                     let array = [obj,obj_v2]
@@ -119,10 +127,13 @@ const fetch = async (req, res, next) => {
                 before: offers_v2.meta.before,
                 after: offers_v2.meta.after,
             }
+
+
             data = {
             flights: flightInfo_v2,
             passengers,
-            pagination
+            offers_v2,
+            pagination,
             }
             // res.send(data).json()
               //return offerDetailList;
@@ -156,35 +167,58 @@ const fetch = async (req, res, next) => {
  */
  const add = async (req, res, next) => {
     try{
-        const {offerId,passengerId,currency,amount,title,phone_number,gender,given_name,family_name,email,born_on} = req.body
-
-        const booking = await duffel.orders.create({ 
-            selected_offers: [offerId],
-            // type: "instant",
-            type: "hold",
-            // commented for hold
-            // payments: [
-            //     {
-            //     type: "balance",
-            //     currency: currency,//"USD",//TOTAL_CURRENCY,
-            //     amount: amount,//"199.85",//TOTAL_AMOUNT
-            //     }
-            // ],
-            passengers: [
-                {
-                    type: "adult",
-                    title: title,
-                    phone_number: phone_number,
-                    id: passengerId,
-                    given_name: given_name,
-                    gender: gender,
-                    family_name: family_name,
-                    email: email,
-                    born_on: born_on
-                }
-                ],            
-            
-        })
+        const {offerId,passengerId,currency,amount,title,phone_number,gender,given_name,family_name,email,born_on,requirePayment} = req.body
+        let booking;
+        if(!requirePayment)
+        {
+            paymentType = "hold"
+            booking = await duffel.orders.create({ 
+                selected_offers: [offerId],
+                type: "hold",
+                passengers: [
+                    {
+                        type: "adult",
+                        title: title || "MR",
+                        phone_number: phone_number || "+42 346262098",
+                        id: passengerId,
+                        given_name: given_name || "emilia",
+                        gender: gender || "m",
+                        family_name: family_name || "test",
+                        email: email || "test@gmail.com",
+                        born_on: born_on || "1995-10-10"
+                    }
+                    ],            
+            })
+        }
+        else{
+            booking = await duffel.orders.create({ 
+                selected_offers: [offerId],
+                type: "instant",
+                // commented for hold
+                payments: [
+                    {
+                    type: "balance",
+                    currency: currency,//"USD",//TOTAL_CURRENCY,
+                    amount: amount,//"199.85",//TOTAL_AMOUNT
+                    }
+                ],
+                passengers: [
+                    {
+                        type: "adult",
+                        title: title || "MR",
+                        phone_number: phone_number || "+42 346262098",
+                        id: passengerId,
+                        given_name: given_name || "emilia",
+                        gender: gender || "m",
+                        family_name: family_name || "test",
+                        email: email || "test@gmail.com",
+                        born_on: born_on || "1995-10-10"
+                    }
+                    ],            
+                
+            })
+        }
+        
 
         // const payment = await duffel.payments.create({
         //     "payment": {
@@ -235,6 +269,31 @@ const fetch = async (req, res, next) => {
                 console.log('=== >>> err === >> ',err)
             }
         
+
+            // save data in booking table 
+
+            let bookingData = new models.booking({})
+            bookingData.id = booking.data.id
+            bookingData.currency = currency
+            bookingData.amount = amount
+            await database.save(bookingData)
+
+            // save data in flight table
+
+            for(let flight of flightInfo_v2)
+            {
+                let flightDetail = new models.flight({})
+                flightDetail.id = flight.id
+                flightDetail.bookingId = booking.data.id
+                flightDetail.to = flight.destination_city
+                flightDetail.from = flight.origin_city
+                flightDetail.departureDate = moment(departure_time).format('YYYY-MM-DD')
+                await database.save(flightDetail)
+            }
+
+
+
+
             data = {
             flights: flightInfo_v2,
             passengers,
